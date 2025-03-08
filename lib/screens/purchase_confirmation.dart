@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto/screens/complete_purchase.dart';
 
 class PurchaseConfirmationScreen extends StatelessWidget {
   final List<String> cart;
@@ -40,6 +41,7 @@ class PurchaseConfirmationScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final productInfo = cart[index].split('|');
                   return ListTile(
+                    leading: Image.network(productInfo[3], width: 50, height: 50, fit: BoxFit.cover),
                     title: Text(productInfo[0]),
                     subtitle: Text('Cantidad: ${productInfo[1]}'),
                     trailing: Text(productInfo[2]),
@@ -53,8 +55,11 @@ class PurchaseConfirmationScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Compra realizada con éxito')),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompletePurchaseScreen(cart: cart),
+                  ),
                 );
               },
               child: const Center(

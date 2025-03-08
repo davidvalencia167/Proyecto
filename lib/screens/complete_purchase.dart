@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto/screens/billing_screen.dart';
 
 class CompletePurchaseScreen extends StatefulWidget {
-  const CompletePurchaseScreen({Key? key}) : super(key: key);
+  final List<String> cart;
+
+  const CompletePurchaseScreen({Key? key, required this.cart}) : super(key: key);
 
   @override
   _CompletePurchaseScreenState createState() => _CompletePurchaseScreenState();
@@ -10,8 +13,20 @@ class CompletePurchaseScreen extends StatefulWidget {
 class _CompletePurchaseScreenState extends State<CompletePurchaseScreen> {
   bool _saveAddressForFutureOrders = false;
 
+  double calculateSubtotal() {
+    return widget.cart.fold(0.0, (sum, item) {
+      List<String> productInfo = item.split('|');
+      double price = double.tryParse(productInfo[2].replaceAll('\$', '')) ?? 0.0;
+      return sum + price;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double subtotal = calculateSubtotal();
+    double shippingCost = 5.00;
+    double total = subtotal + shippingCost;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shopping Information'),
@@ -23,7 +38,6 @@ class _CompletePurchaseScreenState extends State<CompletePurchaseScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Shopping Information Form
               const Text(
                 'Shopping Information',
                 style: TextStyle(
@@ -54,8 +68,6 @@ class _CompletePurchaseScreenState extends State<CompletePurchaseScreen> {
               const SizedBox(height: 16),
               _buildTextField('Email'),
               const SizedBox(height: 16),
-
-              // Save Address Checkbox
               Row(
                 children: [
                   Checkbox(
@@ -69,10 +81,7 @@ class _CompletePurchaseScreenState extends State<CompletePurchaseScreen> {
                   const Text('Save Address for future orders'),
                 ],
               ),
-
               const SizedBox(height: 32),
-
-              // Order Summary
               const Text(
                 'Order Summary',
                 style: TextStyle(
@@ -81,19 +90,22 @@ class _CompletePurchaseScreenState extends State<CompletePurchaseScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildOrderSummaryRow('Product 1', '\$20.00'),
-              _buildOrderSummaryRow('Product 2', '\$115.00'),
-              _buildOrderSummaryRow('Subtotal', '\$135.00'),
-              _buildOrderSummaryRow('Shipping Cost', '\$5.00'),
+              for (var item in widget.cart)
+                _buildOrderSummaryRow(
+                  item.split('|')[0],
+                  item.split('|')[2],
+                ),
+              _buildOrderSummaryRow('Subtotal', '\$${subtotal.toStringAsFixed(2)}'),
+              _buildOrderSummaryRow('Shipping Cost', '\$${shippingCost.toStringAsFixed(2)}'),
               const Divider(height: 32, thickness: 1),
-              _buildOrderSummaryRow('Total Cost', '\$140.00', isBold: true),
-
+              _buildOrderSummaryRow('Total Cost', '\$${total.toStringAsFixed(2)}', isBold: true),
               const SizedBox(height: 32),
-
-              // Complete Purchase Button
               ElevatedButton(
                 onPressed: () {
-                  // Complete purchase logic
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BillingScreen(cart: widget.cart)),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

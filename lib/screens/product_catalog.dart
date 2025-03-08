@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/purchase_confirmation.dart';
+import 'package:proyecto/screens/purchase_confirmation.dart';
 
 class ProductCatalogScreen extends StatefulWidget {
   const ProductCatalogScreen({Key? key}) : super(key: key);
@@ -11,9 +11,9 @@ class ProductCatalogScreen extends StatefulWidget {
 class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
   final List<String> cart = [];
 
-  void addToCart(String productName, String price) {
+  void addToCart(String productName, String price, String image) {
     setState(() {
-      cart.add('$productName|1|$price');
+      cart.add('$productName|1|$price|$image');
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('$productName agregado al carrito')),
@@ -34,25 +34,25 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
         'name': 'Producto 1',
         'price': '\$25.99',
         'image':
-        'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&q=80&w=3270&ixlib=rb-4.0.3',
+        'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&q=80&w=400&h=400&ixlib=rb-4.0.3',
       },
       {
         'name': 'Producto 2',
         'price': '\$30.50',
         'image':
-        'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&q=80&w=3270&ixlib=rb-4.0.3',
+        'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&q=80&w=400&h=400&ixlib=rb-4.0.3',
       },
       {
         'name': 'Producto 3',
         'price': '\$45.00',
         'image':
-        'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=3270&ixlib=rb-4.0.3',
+        'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=400&h=400&ixlib=rb-4.0.3',
       },
       {
         'name': 'Producto 4',
         'price': '\$19.99',
         'image':
-        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=3270&ixlib=rb-4.0.3',
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400&h=400&ixlib=rb-4.0.3',
       },
     ];
 
@@ -123,7 +123,7 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, padding: const EdgeInsets.symmetric(vertical: 12)),
-                          onPressed: () => addToCart(product['name']!, product['price']!),
+                          onPressed: () => addToCart(product['name']!, product['price']!, product['image']!),
                           child: const Text('Agregar al carrito',style: TextStyle(fontSize: 16)),
                         ),
                       ),
